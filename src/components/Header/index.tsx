@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export const Header = () => {
   const realTime = () => {
-    return new Date(Date.now()).toLocaleTimeString(undefined, {
+    return new Date().toLocaleTimeString(undefined, {
       hour: "2-digit",
       hour12: false,
       minute: "2-digit",
@@ -12,7 +12,7 @@ export const Header = () => {
   };
 
   const currentDate = () => {
-    return new Date(Date.now()).toLocaleDateString(undefined, {
+    return new Date().toLocaleDateString(undefined, {
       year: "numeric",
       month: "long",
       day: "2-digit",
@@ -31,7 +31,7 @@ export const Header = () => {
 
   useEffect(() => {
     setFormatedDate(currentDate);
-  }, []);
+  }, [formatedTime]);
 
   return (
     <header className="flex">
