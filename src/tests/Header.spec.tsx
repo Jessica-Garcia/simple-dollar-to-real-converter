@@ -11,9 +11,11 @@ const renderComponent = () => {
 
 describe("Header component", () => {
   it("should show current date in correct format", () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2023-09-01"));
     const date = new Date();
-    renderComponent();
 
+    renderComponent();
     const formatedDate = date.toLocaleDateString(undefined, {
       year: "numeric",
       month: "long",
@@ -26,10 +28,11 @@ describe("Header component", () => {
   });
 
   it("should show current time in correct format", () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2023-09-01"));
     const date = new Date();
 
     renderComponent();
-
     const formatedTime = date.toLocaleTimeString(undefined, {
       hour: "2-digit",
       hour12: false,

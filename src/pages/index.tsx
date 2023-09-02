@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { api } from "../lib/axios";
 import { useQuery } from "react-query";
+import { useState } from "react";
 
 const newConversionFormSchema = z.object({
   dollarQuantity: z.number(),
@@ -19,7 +20,7 @@ export const Home = () => {
     register,
     handleSubmit,
     formState: { isSubmitting },
-    // reset,
+    reset,
   } = useForm<NewConversionFormInputs>({
     resolver: zodResolver(newConversionFormSchema),
     defaultValues: {
@@ -27,7 +28,9 @@ export const Home = () => {
     },
   });
 
-  const { data, isLoading, error } = useQuery(
+  const [result, setResult] = useState(0);
+
+  const { data /* isLoading, error */ } = useQuery(
     "quotationDollarInReais",
     () => {
       return api.get("https://economia.awesomeapi.com.br/last/USD-BRL");
@@ -47,23 +50,20 @@ export const Home = () => {
     conversionData: NewConversionFormInputs,
   ) => {
     const { dollarQuantity, stateTax, type } = conversionData;
-
     const stateTaxPerCent = stateTax / 100;
     const stateTaxValue = dollarQuantity * stateTaxPerCent;
     const IOFCacheValue = dollarQuotation * IOFCache;
     const IOFCreditCardValue = dollarQuantity * IOFCreditCard;
-
+    let conversionResult = 0;
     if (type === "money") {
-      const conversionResult =
+      conversionResult =
         (dollarQuantity + stateTaxValue) * (dollarQuotation + IOFCacheValue);
-      console.log(conversionResult);
-      return conversionResult;
     } else {
-      const conversionResult =
+      conversionResult =
         (dollarQuantity + stateTaxValue + IOFCreditCardValue) * dollarQuotation;
-      console.log(conversionResult);
-      return conversionResult;
     }
+    setResult(conversionResult);
+    reset();
   };
 
   return (
@@ -145,6 +145,10 @@ export const Home = () => {
           Converter
         </button>
       </form>
+      <div>
+        <h1>O resultado é</h1>
+        <div>{result}</div>
+      </div>
     </main>
   );
 };

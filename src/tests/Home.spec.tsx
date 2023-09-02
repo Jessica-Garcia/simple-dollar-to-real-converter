@@ -1,16 +1,28 @@
-import { screen, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Home } from "../pages";
+import { BrowserRouter } from "react-router-dom";
 
-/*
- * Deve mostrar a data atual no formato correto
- * Deve mostrar a hora atual no formato correto
- */
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
 const renderComponent = () => {
-  render(<Home />);
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    </QueryClientProvider>,
+  );
+  return { queryClient };
 };
 
 describe("Home component", () => {
-  it("should show current date in correct format", () => {
+  it("should render component", () => {
     renderComponent();
   });
 });
