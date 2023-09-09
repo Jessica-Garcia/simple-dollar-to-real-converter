@@ -1,10 +1,15 @@
 import * as z from "zod";
+import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as RadioGroup from "@radix-ui/react-radio-group";
 import { api } from "../lib/axios";
 import { useQuery } from "react-query";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../store";
+import {
+  converter,
+  useCurrentConversionResult,
+} from "../store/slices/conversionResult";
 
 const newConversionFormSchema = z.object({
   dollarQuantity: z.number(),
@@ -19,8 +24,8 @@ export const Home = () => {
     control,
     register,
     handleSubmit,
-    formState: { isSubmitting },
     reset,
+    formState: { isSubmitting },
   } = useForm<NewConversionFormInputs>({
     resolver: zodResolver(newConversionFormSchema),
     defaultValues: {
@@ -28,41 +33,29 @@ export const Home = () => {
     },
   });
 
-  const [result, setResult] = useState(0);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const currentConversionResult = useCurrentConversionResult();
 
   const { data /* isLoading, error */ } = useQuery(
     "quotationDollarInReais",
     () => {
-      return api.get("https://economia.awesomeapi.com.br/last/USD-BRL");
+      return api.get("/last/USD-BRL");
     },
     {
       retry: 3,
-      refetchOnWindowFocus: true,
-      refetchInterval: 5000,
     },
   );
-
-  const IOFCache = 0.011;
-  const IOFCreditCard = 0.0538;
-  const dollarQuotation = parseFloat(data?.data.USDBRL.bid);
 
   const handleNewConversion = async (
     conversionData: NewConversionFormInputs,
   ) => {
     const { dollarQuantity, stateTax, type } = conversionData;
-    const stateTaxPerCent = stateTax / 100;
-    const stateTaxValue = dollarQuantity * stateTaxPerCent;
-    const IOFCacheValue = dollarQuotation * IOFCache;
-    const IOFCreditCardValue = dollarQuantity * IOFCreditCard;
-    let conversionResult = 0;
-    if (type === "money") {
-      conversionResult =
-        (dollarQuantity + stateTaxValue) * (dollarQuotation + IOFCacheValue);
-    } else {
-      conversionResult =
-        (dollarQuantity + stateTaxValue + IOFCreditCardValue) * dollarQuotation;
-    }
-    setResult(conversionResult);
+    const dollarQuotation = parseFloat(data?.data.USDBRL.bid);
+
+    dispatch(converter({ dollarQuantity, stateTax, type, dollarQuotation }));
+    navigate("/result");
     reset();
   };
 
@@ -111,6 +104,7 @@ export const Home = () => {
                 <span className="flex items-center gap-1">
                   <RadioGroup.Item
                     value="money"
+                    data-testid="money"
                     id="money"
                     className="bg-gray-300 w-4 h-4 rounded-full shadow-md"
                   >
@@ -125,6 +119,7 @@ export const Home = () => {
                   <RadioGroup.Item
                     value="card"
                     id="card"
+                    data-testid="card"
                     className="bg-gray-300 w-4 h-4 rounded-full shadow-md"
                   >
                     <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:block after:w-2 after:h-2 after:rounded-full after:bg-green-500" />
@@ -145,10 +140,7 @@ export const Home = () => {
           Converter
         </button>
       </form>
-      <div>
-        <h1>O resultado é</h1>
-        <div>{result}</div>
-      </div>
+      <div>{currentConversionResult}</div>
     </main>
   );
 };

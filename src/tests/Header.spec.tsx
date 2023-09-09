@@ -11,8 +11,6 @@ const renderComponent = () => {
 
 describe("Header component", () => {
   it("should show current date in correct format", () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date("2023-09-01"));
     const date = new Date();
 
     renderComponent();
@@ -28,8 +26,6 @@ describe("Header component", () => {
   });
 
   it("should show current time in correct format", () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date("2023-09-01"));
     const date = new Date();
 
     renderComponent();

@@ -24,9 +24,11 @@ export const Header = () => {
   const [formatedDate, setFormatedDate] = useState(currentDate);
 
   useEffect(() => {
-    setInterval(() => {
+    const time = setInterval(() => {
       setFormatedTime(realTime);
     }, 1000);
+
+    return () => clearInterval(time);
   }, []);
 
   useEffect(() => {
@@ -50,7 +52,6 @@ export const Header = () => {
             {formatedTime}
           </span>
         </div>
-        <small>Dados de câmbio disponibilizados pela Morningstar</small>
       </div>
     </header>
   );

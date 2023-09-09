@@ -22,7 +22,7 @@ const renderComponent = () => {
 };
 
 describe("Home component", () => {
-  it("should render component", () => {
+  it("", async () => {
     renderComponent();
   });
 });
