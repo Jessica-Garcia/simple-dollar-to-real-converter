@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { useAppSelector } from "..";
-import { priceFormatter } from "../../utils/formatter";
 
 interface CreateConversion {
   dollarQuotation: number;
@@ -11,14 +10,15 @@ interface CreateConversion {
 
 export interface ConversionState {
   result: number;
+  IOFCache: number;
+  IOFCreditCard: number;
 }
 
 const initialState: ConversionState = {
   result: 0,
+  IOFCache: 0.011,
+  IOFCreditCard: 0.0538,
 };
-
-const IOFCache = 0.011;
-const IOFCreditCard = 0.0538;
 
 export const conversionResultSlice = createSlice({
   name: "conversionResult",
@@ -29,8 +29,8 @@ export const conversionResultSlice = createSlice({
         action.payload;
       const stateTaxPerCent = stateTax / 100;
       const stateTaxValue = dollarQuantity * stateTaxPerCent;
-      const IOFCacheValue = dollarQuotation * IOFCache;
-      const IOFCreditCardValue = dollarQuantity * IOFCreditCard;
+      const IOFCacheValue = dollarQuotation * state.IOFCache;
+      const IOFCreditCardValue = dollarQuantity * state.IOFCreditCard;
 
       if (type === "money") {
         state.result =
@@ -47,9 +47,8 @@ export const conversionResultSlice = createSlice({
 export const conversionResult = conversionResultSlice.reducer;
 export const { converter } = conversionResultSlice.actions;
 
-export const useCurrentConversionResult = () => {
+export const useCurrentConversion = () => {
   return useAppSelector((state) => {
-    const { result } = state.conversionResult;
-    return priceFormatter.format(result);
+    return state.conversionResult;
   });
 };
