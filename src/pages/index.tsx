@@ -10,10 +10,11 @@ import {
   converter,
   useCurrentConversionResult,
 } from "../store/slices/conversionResult";
+import { DollarSignIcon, Percent } from "lucide-react";
 
 const newConversionFormSchema = z.object({
-  dollarQuantity: z.number(),
-  stateTax: z.number(),
+  dollarQuantity: z.number().positive(),
+  stateTax: z.number().positive(),
   type: z.enum(["money", "card"]),
 });
 
@@ -64,29 +65,45 @@ export const Home = () => {
       <form
         onSubmit={handleSubmit(handleNewConversion)}
         className="flex flex-col border-solid border-green-400 border-2"
+        autoComplete="off"
       >
         <div className="flex">
           <span className="flex flex-col">
             <label htmlFor="dollar">Dollar</label>
-            <input
-              type="number"
-              id="dollar"
-              placeholder="$"
-              {...register("dollarQuantity", {
-                valueAsNumber: true,
-              })}
-              required
-            />
+            <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+              <DollarSignIcon className="h-4 w-4 text-zinc-400" />
+              <input
+                className="flex-1  border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 placeholder:text-sm outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
+                id="dollar"
+                type="number"
+                {...register("dollarQuantity", {
+                  valueAsNumber: true,
+                  required: true,
+                })}
+                placeholder="00.00"
+                min={0.01}
+                step={0.01}
+                autoFocus
+              />
+            </div>
           </span>
           <span className="flex flex-col">
             <label htmlFor="tax">Taxa do estado</label>
-            <input
-              type="number"
-              id="tax"
-              placeholder="%"
-              {...register("stateTax", { valueAsNumber: true })}
-              required
-            />
+            <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+              <Percent className="h-4 w-4 text-zinc-400" />
+              <input
+                className="flex-1 placeholder:text-sm border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
+                id="tax"
+                type="number"
+                min={0.01}
+                step={0.01}
+                placeholder="00.00"
+                {...register("stateTax", {
+                  valueAsNumber: true,
+                  required: true,
+                })}
+              />
+            </div>
           </span>
         </div>
 

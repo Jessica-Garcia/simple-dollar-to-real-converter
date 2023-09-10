@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { useAppSelector } from "..";
+import { priceFormatter } from "../../utils/formatter";
 
 interface CreateConversion {
   dollarQuotation: number;
@@ -49,6 +50,6 @@ export const { converter } = conversionResultSlice.actions;
 export const useCurrentConversionResult = () => {
   return useAppSelector((state) => {
     const { result } = state.conversionResult;
-    return result;
+    return priceFormatter.format(result);
   });
 };
