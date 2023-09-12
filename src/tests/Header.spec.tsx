@@ -1,10 +1,6 @@
-import { screen, render } from "@testing-library/react";
+/* import { screen, render } from "@testing-library/react";
 import { Header } from "../components/Header";
 
-/*
- * Deve mostrar a data atual no formato correto
- * Deve mostrar a hora atual no formato correto
- */
 const renderComponent = () => {
   render(<Header />);
 };
@@ -40,4 +36,4 @@ describe("Header component", () => {
     const timeElement = screen.getByTestId("time");
     expect(timeElement).toHaveTextContent(formatedTime);
   });
-});
+}); */

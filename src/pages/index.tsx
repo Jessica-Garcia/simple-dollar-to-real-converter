@@ -65,119 +65,120 @@ export const Home = () => {
   };
 
   return (
-    <main className="flex">
+    <main className="flex justify-center max-w-screen dark:text-zinc-300">
       <form
         onSubmit={handleSubmit(handleNewConversion)}
-        className="flex flex-col border-solid border-green-400 border-2"
+        className="flex items-center space-y-3 flex-col border-solid w-full px-4 py-8 border-green-400 border-2 rounded-xl"
         autoComplete="off"
       >
-        <div className="flex">
-          <span className="flex flex-col">
-            <label htmlFor="dollar">Valor em dólar</label>
-            <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
-              <BadgeDollarSign className="h-4 w-4 text-zinc-400" />
-              <input
-                className="flex-1  border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 placeholder:text-sm outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
-                id="dollar"
-                type="number"
-                {...register("dollarQuantity", {
-                  valueAsNumber: true,
-                  required: true,
-                })}
-                placeholder="0"
-                min={0.01}
-                step={0.01}
-                autoFocus
-              />
-            </div>
-          </span>
-          <span className="flex flex-col">
-            <label htmlFor="tax">Taxa do estado</label>
-            <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
-              <BadgePercent className="h-4 w-4 text-zinc-400" />
-              <input
-                className="flex-1 placeholder:text-sm border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
-                id="tax"
-                type="number"
-                min={0}
-                step={0.01}
-                placeholder="0"
-                {...register("stateTax", {
-                  valueAsNumber: true,
-                  required: true,
-                })}
-              />
-            </div>
-          </span>
-        </div>
+        <span className="flex flex-col w-4/5">
+          <label htmlFor="dollar" className="">
+            Valor em dólar
+          </label>
+          <div className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+            <BadgeDollarSign className="h-4 w-4 text-zinc-400" />
+            <input
+              className="border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 placeholder:text-sm outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
+              id="dollar"
+              type="number"
+              {...register("dollarQuantity", {
+                valueAsNumber: true,
+                required: true,
+              })}
+              placeholder="0"
+              min={0.01}
+              step={0.01}
+              autoFocus
+            />
+          </div>
+        </span>
+        <span className="flex flex-col w-4/5">
+          <label htmlFor="tax">Taxa do estado</label>
+          <div className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+            <BadgePercent className="h-4 w-4 text-zinc-400" />
+            <input
+              className="flex-1 placeholder:text-sm border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
+              id="tax"
+              type="number"
+              min={0}
+              step={0.01}
+              placeholder="0"
+              {...register("stateTax", {
+                valueAsNumber: true,
+                required: true,
+              })}
+            />
+          </div>
+        </span>
+        <span className="w-4/5">
+          <h1>Tipo de compra</h1>
+          <Controller
+            control={control}
+            name="type"
+            render={({ field }) => {
+              return (
+                <>
+                  <RadioGroup.Root
+                    className="flex gap-3"
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <span className="flex items-center gap-1">
+                      <RadioGroup.Item
+                        value="money"
+                        data-testid="money"
+                        id="money"
+                        className="bg-gray-300 w-4 h-4 rounded-full shadow-md"
+                      >
+                        <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:block after:w-2 after:h-2 after:rounded-full after:bg-green-500" />
+                      </RadioGroup.Item>
+                      <label htmlFor="money" className="">
+                        Dinheiro
+                      </label>
+                    </span>
 
-        <h1>Tipo de compra</h1>
-        <Controller
-          control={control}
-          name="type"
-          render={({ field }) => {
-            return (
-              <>
-                <RadioGroup.Root
-                  className="flex gap-3"
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
-                  <span className="flex items-center gap-1">
-                    <RadioGroup.Item
-                      value="money"
-                      data-testid="money"
-                      id="money"
-                      className="bg-gray-300 w-4 h-4 rounded-full shadow-md"
-                    >
-                      <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:block after:w-2 after:h-2 after:rounded-full after:bg-green-500" />
-                    </RadioGroup.Item>
-                    <label htmlFor="money" className="">
-                      Dinheiro
-                    </label>
+                    <span className="flex items-center gap-1">
+                      <RadioGroup.Item
+                        value="card"
+                        id="card"
+                        data-testid="card"
+                        className="bg-gray-300 w-4 h-4 rounded-full shadow-md"
+                      >
+                        <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:block after:w-2 after:h-2 after:rounded-full after:bg-green-500" />
+                      </RadioGroup.Item>
+                      <label htmlFor="card" className="">
+                        Cartão
+                      </label>
+                    </span>
+                  </RadioGroup.Root>
+
+                  <span className="flex flex-col">
+                    <label htmlFor="iofcache">IOF</label>
+                    <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+                      <BadgePercent className="h-4 w-4 text-zinc-400" />
+                      <input
+                        className="flex-1 border-0 bg-transparent p-0 outline-none text-zinc-400 text-sm"
+                        id="iofcache"
+                        readOnly
+                        value={
+                          field.value === "money"
+                            ? IOFCachePerCentValue.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                              })
+                            : IOFCreditCardPerCentValue.toLocaleString(
+                                undefined,
+                                { maximumFractionDigits: 2 },
+                              )
+                        }
+                      />
+                    </div>
                   </span>
-
-                  <span className="flex items-center gap-1">
-                    <RadioGroup.Item
-                      value="card"
-                      id="card"
-                      data-testid="card"
-                      className="bg-gray-300 w-4 h-4 rounded-full shadow-md"
-                    >
-                      <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:block after:w-2 after:h-2 after:rounded-full after:bg-green-500" />
-                    </RadioGroup.Item>
-                    <label htmlFor="card" className="">
-                      Cartão
-                    </label>
-                  </span>
-                </RadioGroup.Root>
-
-                <span className="flex flex-col">
-                  <label htmlFor="iofcache">IOF</label>
-                  <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
-                    <BadgePercent className="h-4 w-4 text-zinc-400" />
-                    <input
-                      className="flex-1 border-0 bg-transparent p-0 outline-none text-zinc-400 text-sm"
-                      id="iofcache"
-                      readOnly
-                      value={
-                        field.value === "money"
-                          ? IOFCachePerCentValue.toLocaleString(undefined, {
-                              maximumFractionDigits: 2,
-                            })
-                          : IOFCreditCardPerCentValue.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 },
-                            )
-                      }
-                    />
-                  </div>
-                </span>
-              </>
-            );
-          }}
-        />
-        <span className="flex flex-col">
+                </>
+              );
+            }}
+          />
+        </span>
+        <span className="flex flex-col w-4/5">
           <label htmlFor="quotation">Cotação do dólar em reais</label>
           <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
             <BadgeDollarSign className="h-4 w-4 text-zinc-400" />
