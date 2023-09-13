@@ -65,20 +65,24 @@ export const Home = () => {
   };
 
   return (
-    <main className="flex justify-center max-w-screen dark:text-zinc-300">
+    <main className="flex relative top-[220px] mr-auto ml-auto w-11/12 max-w-xl lg:max-w-2xl justify-center dark:text-zinc-300">
       <form
         onSubmit={handleSubmit(handleNewConversion)}
-        className="flex items-center space-y-3 flex-col border-solid w-full px-4 py-8 border-green-400 border-2 rounded-xl"
+        className="flex items-center space-y-6 mb-5 flex-col border-solid w-full py-8 border-green-400 border-2 rounded-xl"
         autoComplete="off"
       >
-        <span className="flex flex-col w-4/5">
+        {/* insert infos */}
+        <div className="w-4/5 flex justify-center flex-col gap-4">
+          {/* dollar value */}
+
           <label htmlFor="dollar" className="">
             Valor em dólar
           </label>
+
           <div className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
             <BadgeDollarSign className="h-4 w-4 text-zinc-400" />
             <input
-              className="border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 placeholder:text-sm outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
+              className="border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
               id="dollar"
               type="number"
               {...register("dollarQuantity", {
@@ -91,13 +95,14 @@ export const Home = () => {
               autoFocus
             />
           </div>
-        </span>
-        <span className="flex flex-col w-4/5">
+
+          {/* state tax */}
+
           <label htmlFor="tax">Taxa do estado</label>
           <div className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
             <BadgePercent className="h-4 w-4 text-zinc-400" />
             <input
-              className="flex-1 placeholder:text-sm border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
+              className="flex-1 border-0 bg-transparent p-0 text-zinc-900 placeholder-zinc-600 outline-none dark:text-zinc-100 dark:placeholder-zinc-400"
               id="tax"
               type="number"
               min={0}
@@ -109,8 +114,9 @@ export const Home = () => {
               })}
             />
           </div>
-        </span>
-        <span className="w-4/5">
+        </div>
+        {/* dinamic infos */}
+        <div className="flex w-4/5 justify-center flex-col gap-4">
           <h1>Tipo de compra</h1>
           <Controller
             control={control}
@@ -119,11 +125,11 @@ export const Home = () => {
               return (
                 <>
                   <RadioGroup.Root
-                    className="flex gap-3"
+                    className="flex flex-col gap-4 flex-wrap"
                     onValueChange={field.onChange}
                     value={field.value}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-2">
                       <RadioGroup.Item
                         value="money"
                         data-testid="money"
@@ -137,7 +143,7 @@ export const Home = () => {
                       </label>
                     </span>
 
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-2">
                       <RadioGroup.Item
                         value="card"
                         id="card"
@@ -152,38 +158,37 @@ export const Home = () => {
                     </span>
                   </RadioGroup.Root>
 
-                  <span className="flex flex-col">
-                    <label htmlFor="iofcache">IOF</label>
-                    <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
-                      <BadgePercent className="h-4 w-4 text-zinc-400" />
-                      <input
-                        className="flex-1 border-0 bg-transparent p-0 outline-none text-zinc-400 text-sm"
-                        id="iofcache"
-                        readOnly
-                        value={
-                          field.value === "money"
-                            ? IOFCachePerCentValue.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                              })
-                            : IOFCreditCardPerCentValue.toLocaleString(
-                                undefined,
-                                { maximumFractionDigits: 2 },
-                              )
-                        }
-                      />
-                    </div>
-                  </span>
+                  <label htmlFor="iof">IOF</label>
+                  <div className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+                    <BadgePercent className="h-4 w-4 text-zinc-400" />
+                    <input
+                      className="border-0 bg-transparent p-0 text-zinc-600  outline-none dark:text-zinc-400"
+                      id="iof"
+                      readOnly
+                      value={
+                        field.value === "money"
+                          ? IOFCachePerCentValue.toLocaleString(undefined, {
+                              maximumFractionDigits: 2,
+                            })
+                          : IOFCreditCardPerCentValue.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 },
+                            )
+                      }
+                    />
+                  </div>
                 </>
               );
             }}
           />
-        </span>
-        <span className="flex flex-col w-4/5">
+
+          {/* Quotation */}
+
           <label htmlFor="quotation">Cotação do dólar em reais</label>
-          <div className="flex w-full items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+          <div className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
             <BadgeDollarSign className="h-4 w-4 text-zinc-400" />
             <input
-              className="flex-1 border-0 bg-transparent p-0 outline-none text-zinc-400 text-sm"
+              className="flex-1 border-0 bg-transparent p-0 text-zinc-600 outline-none dark:text-zinc-400 "
               id="quotation"
               readOnly
               value={parseFloat(data?.data.USDBRL.bid).toLocaleString(
@@ -192,14 +197,17 @@ export const Home = () => {
               )}
             />
           </div>
-        </span>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="bg-green-500 w-36"
-        >
-          Converter
-        </button>
+        </div>
+        {/* Button */}
+        <div className="flex w-4/5 items-center justify-center lg:flex-row gap-4">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-green-600 w-full rounded-lg border-none px-3 py-2 shadow-sm"
+          >
+            Converter
+          </button>
+        </div>
       </form>
     </main>
   );
