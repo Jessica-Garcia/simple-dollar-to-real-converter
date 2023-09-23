@@ -1,7 +1,7 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { Home } from "./pages";
-import { Result } from "./pages/Result";
-import { DefaultLayout } from "./layouts/DefaultLayout";
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Home } from './pages'
+import { Result } from './pages/Result'
+import { DefaultLayout } from './layouts/DefaultLayout'
 
 export const Router = () => {
   return (
@@ -13,5 +13,5 @@ export const Router = () => {
         </Route>
       </Routes>
     </BrowserRouter>
-  );
-};
+  )
+}

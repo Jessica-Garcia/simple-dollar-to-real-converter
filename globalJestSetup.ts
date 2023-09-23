@@ -1,5 +1,5 @@
 async function globalSetup() {
-  process.env.TZ = "UTC";
+  process.env.TZ = 'UTC'
 }
 
-export default globalSetup;
+export default globalSetup
