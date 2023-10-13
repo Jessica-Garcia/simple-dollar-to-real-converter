@@ -12,12 +12,18 @@ export interface ConversionState {
   result: number
   IOFCache: number
   IOFCreditCard: number
+  dollarQuotation: number
+  stateTax: number
+  type: 'money' | 'card'
 }
 
 const initialState: ConversionState = {
   result: 0,
   IOFCache: 0.011,
-  IOFCreditCard: 0.0538
+  IOFCreditCard: 0.0538,
+  dollarQuotation: 0,
+  stateTax: 0,
+  type: 'money'
 }
 
 export const conversionResultSlice = createSlice({
@@ -35,10 +41,14 @@ export const conversionResultSlice = createSlice({
         state.result =
           (dollarQuantity + stateTaxValue) * (dollarQuotation + IOFCacheValue)
       } else {
+        state.type = 'card'
         state.result =
           (dollarQuantity + stateTaxValue + IOFCreditCardValue) *
           dollarQuotation
       }
+
+      state.stateTax = stateTax
+      state.dollarQuotation = dollarQuotation
     }
   }
 })
